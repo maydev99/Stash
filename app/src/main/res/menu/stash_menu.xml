@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/about"
+        android:title="About"
+        android:orderInCategory="99"
+        app:showAsAction="never">
+
+    </item>
+
+    <item
+        android:id="@+id/add_link"
+        android:title="Add Link"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_insert_link_black_24dp"
+        app:showAsAction="always">
+
+    </item>
+
+
+    <item
+        android:id="@+id/delete_all"
+        android:title="Delete All"
+        android:orderInCategory="30"
+        app:showAsAction="never">
+
+    </item>
+</menu>

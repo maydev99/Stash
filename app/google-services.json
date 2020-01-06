@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "874453770949",
+    "firebase_url": "https://stash-514e0.firebaseio.com",
+    "project_id": "stash-514e0",
+    "storage_bucket": "stash-514e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874453770949:android:a1332c1890abfcc6ca06ac",
+        "android_client_info": {
+          "package_name": "com.bombadu.stash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "874453770949-6olr107n5oj83fs3v2tu1q3aoh0304rb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCorhmSJ17Wc_R3VaUsORB8SIfC9dtnzWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874453770949-6olr107n5oj83fs3v2tu1q3aoh0304rb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
