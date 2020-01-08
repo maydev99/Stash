@@ -20,11 +20,5 @@
     </item>
 
 
-    <item
-        android:id="@+id/delete_all"
-        android:title="Delete All"
-        android:orderInCategory="30"
-        app:showAsAction="never">
 
-    </item>
 </menu>

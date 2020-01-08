@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,9 @@ class StashList : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stash_list)
+
+        getFBData()
+
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val editText = findViewById<EditText>(R.id.add_edit_text)
         val addLinkButton = findViewById<Button>(R.id.add_link_button)
@@ -40,7 +44,7 @@ class StashList : AppCompatActivity() {
         if (receivedAction.equals(Intent.ACTION_SEND)) {
             if (receivedType != null) {
                 if (receivedType.startsWith("text/")) {
-                    var urlText = receivedIntent.getStringExtra(Intent.EXTRA_TEXT)
+                    val urlText = receivedIntent.getStringExtra(Intent.EXTRA_TEXT)
                     println(urlText)
                     //urlList.add(urlText)
                     urlRef.push().setValue(urlText)
@@ -52,10 +56,19 @@ class StashList : AppCompatActivity() {
 
 
         addLinkButton.setOnClickListener {
-            var newLink = editText.text.toString()
-            urlRef.push().setValue(newLink)
-            val addLinkLayout = findViewById<LinearLayout>(R.id.add_link_layout)
-            addLinkLayout.visibility = View.GONE
+
+            val newLink = editText.text.toString()
+            if (newLink.contains("https") || (newLink.contains("https")) && (!newLink.contains(""))) {
+                urlRef.push().setValue(newLink)
+                val addLinkLayout = findViewById<LinearLayout>(R.id.add_link_layout)
+                editText.text = null
+                addLinkLayout.visibility = View.GONE
+
+            } else {
+
+                Toast.makeText(this, "not a valid url", Toast.LENGTH_SHORT).show()
+            }
+
 
         }
 
@@ -72,9 +85,10 @@ class StashList : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 listData.clear()
                 for (item in dataSnapshot.children) {
-                    var url = item.value.toString()
-                    var key = item.key.toString()
+                    val url = item.value.toString()
+                    val key = item.key.toString()
                     listData.add(Links(url,key))
+                    listData.reverse()
 
                 }
                 //println("URLS: $urlList")
@@ -99,7 +113,7 @@ class StashList : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        getFBData()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -119,11 +133,6 @@ class StashList : AppCompatActivity() {
 
         }
 
-        if (item.itemId == R.id.delete_all) {
-            urlRef.removeValue()
-            getFBData()
-
-        }
 
         if (item.itemId == R.id.add_link) {
             val addLinkLayout = findViewById<LinearLayout>(R.id.add_link_layout)

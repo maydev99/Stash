@@ -12,25 +12,33 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone">
 
         <EditText
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:id="@+id/add_edit_text"
-            android:hint="add or paste link here"
-            android:background="@android:color/white"
+            android:hint="type or paste link here"
+            android:background="@drawable/rounded_corners"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp"/>
+            android:paddingRight="8dp"
+            android:gravity="center"
+            android:layout_marginRight="8dp"
+            />
 
         <Button
             android:id="@+id/add_link_button"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:text="add link"/>
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_corners_button"
+            android:elevation="10dp"
+            android:text="@string/stash_it"/>
 
 
     </LinearLayout>
