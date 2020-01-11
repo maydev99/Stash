@@ -7,4 +7,9 @@
     <string name="create_account">Create an Account</string>
     <string name="new_account">New Account</string>
     <string name="stash">Stash</string>
+    <string name="about">About</string>
+    <string name="add_link">Add Link</string>
+    <string name="sign_out">Sign-Out</string>
+    <string name="required">Required</string>
+    <string name="type_or_paste_link_here">type or paste link here</string>
 </resources>

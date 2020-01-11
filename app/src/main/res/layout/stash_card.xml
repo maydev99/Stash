@@ -20,11 +20,27 @@
         app:cardCornerRadius="16dp"
         android:padding="16dp">
 
-        <com.freesoulapps.preview.android.Preview
-            android:id="@+id/preview_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dateTimeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:gravity="center_horizontal"/>
+
+            <com.freesoulapps.preview.android.Preview
+                android:id="@+id/preview_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+        </LinearLayout>
+
+
 
     </androidx.cardview.widget.CardView>
 

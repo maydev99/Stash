@@ -3,6 +3,7 @@ package com.bombadu.stash
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -11,9 +12,8 @@ import kotlinx.android.synthetic.main.activity_auth.*
 class Auth : AppCompatActivity() {
 
     private var isCreatingNewAccount = false
-    //private var email: String? = null
     private var auth: FirebaseAuth? = null
-    //private var password : String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +25,18 @@ class Auth : AppCompatActivity() {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
+            if (validateForm(email, password)) {
+                return@setOnClickListener
+            }
+
             if (isCreatingNewAccount) {
                 createNewAccount(email, password)
             } else {
                 signIn(email, password)
+
             }
+
+
         }
 
 
@@ -53,12 +60,34 @@ class Auth : AppCompatActivity() {
 
     }
 
+    private fun validateForm(email: String, password: String): Boolean {
+
+        var valid = true
+
+        if (TextUtils.isEmpty(email)) {
+            emailEditText.error = getString(R.string.required)
+            valid = false
+        } else {
+            emailEditText.error = null
+        }
+
+        if (TextUtils.isEmpty(password)){
+            passwordEditText.error = getString(R.string.required)
+            valid = false
+        } else {
+            passwordEditText.error = null
+        }
+
+        return  !valid
+
+    }
+
     private fun signIn(email: String, password: String) {
         auth!!.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     startActivity(Intent(this, StashList::class.java))
-                    makeAToast("Sign_In Successful")
+                    makeAToast("Sign-In Successful")
                     finish()
                 } else {
                     makeAToast("Sign-In Failed")

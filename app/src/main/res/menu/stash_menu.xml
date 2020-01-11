@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/about"
-        android:title="About"
+        android:title="@string/about"
         android:orderInCategory="99"
         app:showAsAction="never">
 
@@ -12,10 +12,18 @@
 
     <item
         android:id="@+id/add_link"
-        android:title="Add Link"
+        android:title="@string/add_link"
         android:orderInCategory="10"
         android:icon="@drawable/ic_insert_link_black_24dp"
-        app:showAsAction="always">
+        app:showAsAction="ifRoom">
+
+    </item>
+
+    <item
+        android:id="@+id/sign_out"
+        android:title="@string/sign_out"
+        android:orderInCategory="50"
+        app:showAsAction="never">
 
     </item>
 
