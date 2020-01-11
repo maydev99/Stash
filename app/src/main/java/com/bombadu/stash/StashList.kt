@@ -38,20 +38,13 @@ class StashList : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.add_edit_text)
         val addLinkButton = findViewById<Button>(R.id.add_link_button)
 
-        val receivedIntent = intent
-        val receivedAction = receivedIntent.action
-        val receivedType = receivedIntent.type
-        if (receivedAction.equals(Intent.ACTION_SEND)) {
-            if (receivedType != null) {
-                if (receivedType.startsWith("text/")) {
-                    val urlText = receivedIntent.getStringExtra(Intent.EXTRA_TEXT)
-                    println(urlText)
-                    //urlList.add(urlText)
-                    urlRef.push().setValue(urlText)
+        val intent = intent
+        val myUrl = intent.getStringExtra("url_key")
 
+        println("AUTH STASHLIST: $myUrl")
 
-                }
-            }
+        if(myUrl != null) {
+            urlRef.push().setValue(myUrl)
         }
 
 
@@ -111,10 +104,7 @@ class StashList : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
 
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.stash_menu, menu)

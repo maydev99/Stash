@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Stash</string>
     <string name="stash_it">Stash It!</string>
+    <string name="sign_in">Sign-In</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+    <string name="create_account">Create an Account</string>
+    <string name="new_account">New Account</string>
+    <string name="stash">Stash</string>
 </resources>
