@@ -1,18 +1,17 @@
 package com.bombadu.stash
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.view.Window
 import android.view.animation.AnticipateOvershootInterpolator
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
@@ -22,10 +21,10 @@ import com.bombadu.stash.model.Links
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_stash_list_entry_bar.*
+import kotlinx.android.synthetic.main.date_range_layout.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-
 
 
 class StashList : AppCompatActivity() {
@@ -71,11 +70,14 @@ class StashList : AppCompatActivity() {
         addLinkButton.setOnClickListener {
 
             val newLink = editText.text.toString()
-            if (newLink.contains("https") || (newLink.contains("https")) && (!newLink.contains(""))) {
-                //urlRef.push().setValue(newLink)
-                val addLinkLayout = findViewById<LinearLayout>(R.id.add_link_layout)
+            if (newLink.contains("http")) {
+                val timeStamp = getTimeStamp()
+                val taskMap: MutableMap<String, Any> = HashMap()
+                taskMap["time_stamp"] = timeStamp
+                taskMap["url"] = newLink
+                urlListRef?.push()?.updateChildren(taskMap)
                 editText.text = null
-                addLinkLayout.visibility = View.GONE
+
 
             } else {
 
@@ -103,14 +105,11 @@ class StashList : AppCompatActivity() {
                 listData.clear()
                 for (item in dataSnapshot.children) {
                     val key = item.key.toString()
-
                     val url = dataSnapshot.child(key).child("url").value.toString()
-                    println("KEYKEYKEY: $url")
                     val timeStamp = dataSnapshot.child(key).child("time_stamp").value.toString()
                     val dateTime: String = localDateTime(timeStamp) as String
+                    listData.add(Links(url,key,dateTime))
 
-                    listData.add(Links(url,key, dateTime))
-                    listData.reverse()
 
                 }
 
@@ -136,7 +135,7 @@ class StashList : AppCompatActivity() {
     private fun localDateTime(timeStamp: String): Any {
         val calendar = Calendar.getInstance()
         val tz = calendar.timeZone
-        val sdf = SimpleDateFormat("MM.dd.yyy hh:mm:ss a")
+        val sdf = SimpleDateFormat("MM.dd.yyy hh:mm:ss a", Locale.getDefault())
         sdf.timeZone = tz
         val tsLong = timeStamp.toLong()
         return  sdf.format(Date(tsLong * 1000))
@@ -169,13 +168,7 @@ class StashList : AppCompatActivity() {
             } else {
                 showLinkEntryLayout()
             }
-           /* val addLinkLayout = findViewById<LinearLayout>(R.id.add_link_layout)
 
-            addLinkLayout.visibility = if (addLinkLayout.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }*/
         }
 
 
@@ -185,7 +178,42 @@ class StashList : AppCompatActivity() {
             finish()
         }
 
+        if (item.itemId == R.id.date_range) {
+            showDateRangeDialog()
+        }
+
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDateRangeDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        dialog.setContentView(R.layout.date_range_layout)
+        val timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()).toString()
+        val timeStampL = timeStamp.toLong()
+        var elapsedTime: Long
+        dialog.radio_group.setOnCheckedChangeListener{ group, checkedId ->
+            val selectedRadioButton: RadioButton = dialog.findViewById(checkedId)
+            val selected: String = selectedRadioButton.text as String
+            println("RB: $selected")
+
+            if(selected == "Today") {
+                elapsedTime = (TimeUnit.DAYS.toDays(1) / 1000)
+            } else if (selected == "Past Week") {
+                elapsedTime = (TimeUnit.DAYS.toDays(7) / 1000)
+            } else if (selected == "Past Month"){
+                elapsedTime = (TimeUnit.DAYS.toDays(30) / 1000)
+            } else {
+                elapsedTime = (TimeUnit.DAYS.toDays(1095) / 1000)
+            }
+
+            val startTime = timeStampL - elapsedTime
+            //getFBData(startTime)
+        }
+
+        dialog.show()
     }
 
     private fun showLinkEntryLayout() {

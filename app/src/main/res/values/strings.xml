@@ -12,4 +12,10 @@
     <string name="sign_out">Sign-Out</string>
     <string name="required">Required</string>
     <string name="type_or_paste_link_here">type or paste link here</string>
+    <string name="sharebutton">shareButton</string>
+    <string name="view">View</string>
+    <string name="today">Today</string>
+    <string name="past_week">Past Week</string>
+    <string name="past_month">Past Month</string>
+    <string name="all">All</string>
 </resources>

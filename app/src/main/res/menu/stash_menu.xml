@@ -28,5 +28,15 @@
     </item>
 
 
+    <item
+        android:id="@+id/date_range"
+        android:title="Date Range"
+        android:icon="@drawable/ic_date_range_white_24dp"
+        android:orderInCategory="20"
+        app:showAsAction="ifRoom">
+
+    </item>
+
+
 
 </menu>

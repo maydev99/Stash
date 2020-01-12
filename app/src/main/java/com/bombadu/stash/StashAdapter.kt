@@ -8,24 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bombadu.stash.model.Links
 import com.freesoulapps.preview.android.Preview
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import kotlin.coroutines.coroutineContext
+import kotlinx.android.synthetic.main.stash_card.view.*
 
-class StashAdapter(private val listData: List<Links>) : RecyclerView.Adapter<StashAdapter.ViewHolder>(){
+class StashAdapter(private val listData: List<Links>) :
+    RecyclerView.Adapter<StashAdapter.ViewHolder>() {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var rootRef = FirebaseDatabase.getInstance().reference
     private var uid = auth.currentUser?.uid
     private var urlListRef = rootRef.child("users").child(uid.toString()).child("url_list")
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-       val view = LayoutInflater.from(parent.context).inflate(R.layout.stash_card, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.stash_card, parent, false)
         return ViewHolder(view)
     }
 
@@ -34,9 +33,11 @@ class StashAdapter(private val listData: List<Links>) : RecyclerView.Adapter<Sta
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(listData[position])
-    }
+        val revPos =
+            listData.size - (position + 1)//Reverses the position so newest posts are at the top
+        holder.bindItems(listData[revPos])
 
+    }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -46,12 +47,11 @@ class StashAdapter(private val listData: List<Links>) : RecyclerView.Adapter<Sta
         var timeStamp: String? = null
 
         fun bindItems(links: Links) {
-            webUrl= links.webUrl
+            webUrl = links.webUrl
             urlKey = links.urlKey
             timeStamp = links.dateTime
             val previewView = itemView.findViewById<Preview>(R.id.preview_view)
             val dateTimeTextView = itemView.findViewById<TextView>(R.id.dateTimeTextView)
-            val cardView = itemView.findViewById<CardView>(R.id.cardView)
             dateTimeTextView.text = timeStamp
             previewView.setListener(this)
             previewView.setData(webUrl)
@@ -65,6 +65,17 @@ class StashAdapter(private val listData: List<Links>) : RecyclerView.Adapter<Sta
 
 
         init {
+            itemView.share_image_view.setOnClickListener {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, webUrl)
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                itemView.context.startActivity(shareIntent)
+            }
+
             itemView.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(webUrl)
@@ -76,12 +87,12 @@ class StashAdapter(private val listData: List<Links>) : RecyclerView.Adapter<Sta
                 builder.setTitle("Delete this item")
                 builder.setMessage("Are you sure?")
                 builder.setIcon(R.mipmap.ic_launcher_round)
-                builder.setPositiveButton("delete") {dialog, which ->
-                    Toast.makeText(itemView.context, "Deleted",Toast.LENGTH_SHORT).show()
+                builder.setPositiveButton("delete") { dialog, which ->
+                    Toast.makeText(itemView.context, "Deleted", Toast.LENGTH_SHORT).show()
                     urlListRef.child(urlKey.toString()).removeValue()
                 }
 
-                builder.setNegativeButton("cancel") {dialog, which ->
+                builder.setNegativeButton("cancel") { dialog, which ->
                     //Toast.makeText(itemView.context, "Deleted",Toast.LENGTH_SHORT).show()
                 }
                 builder.show()
@@ -89,7 +100,10 @@ class StashAdapter(private val listData: List<Links>) : RecyclerView.Adapter<Sta
                 return@setOnLongClickListener true
             }
 
+
         }
+
+
     }
 
 
