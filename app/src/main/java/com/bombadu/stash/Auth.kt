@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -112,5 +114,18 @@ class Auth : AppCompatActivity() {
 
     private fun makeAToast(tMessage: String) {
         Toast.makeText(this, tMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.sign_in_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.password_reset) {
+            startActivity(Intent(this, PasswordReset::class.java))
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

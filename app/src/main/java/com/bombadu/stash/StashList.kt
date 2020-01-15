@@ -1,7 +1,9 @@
 package com.bombadu.stash
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -22,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_stash_list_entry_bar.*
 import kotlinx.android.synthetic.main.date_range_layout.*
+import kotlinx.android.synthetic.main.empty_list_dialog_layout.*
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -50,14 +54,15 @@ class StashList : AppCompatActivity() {
         urlListRef = userDataRef.child("url_list")
         val editText = findViewById<EditText>(R.id.add_edit_text)
         val addLinkButton = findViewById<Button>(R.id.add_link_button)
+        val timeSpan: Long = getRangeInTime(3650)
 
-        getFBData()
+        getFBData(timeSpan)
 
         val intent = intent
         val myUrl = intent.getStringExtra("url_key")
 
 
-        if(myUrl != null) {
+        if (myUrl != null) {
             val timeStamp = getTimeStamp()
             val taskMap: MutableMap<String, Any> = HashMap()
             taskMap["time_stamp"] = timeStamp
@@ -89,12 +94,35 @@ class StashList : AppCompatActivity() {
 
 
     }
+
+    private fun getRangeInTime(dateRange: Long): Long {
+        val timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
+        //val timeStampL = timeStamp.toLong()
+        val elapsedTime: Long = when {
+            dateRange <= 1 -> {
+                (TimeUnit.DAYS.toMillis(1) / 1000)
+            }
+            dateRange <= 7 -> {
+                (TimeUnit.DAYS.toMillis(7) / 1000)
+            }
+            dateRange <= 30 -> {
+                (TimeUnit.DAYS.toMillis(30) / 1000)
+            }
+            else -> {
+                (TimeUnit.DAYS.toMillis(1095) / 1000)
+            }
+        }
+
+        return timeStamp - elapsedTime
+
+    }
+
     //Timestamp is saved to Firebase when entered into db and formatted to local time when retrieved
     private fun getTimeStamp(): String {
         return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()).toString() + ""
     }
 
-    private fun getFBData() {
+    private fun getFBData(dateRange: Long) {
 
         val urlListener = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -106,11 +134,21 @@ class StashList : AppCompatActivity() {
                 for (item in dataSnapshot.children) {
                     val key = item.key.toString()
                     val url = dataSnapshot.child(key).child("url").value.toString()
-                    val timeStamp = dataSnapshot.child(key).child("time_stamp").value.toString()
-                    val dateTime: String = localDateTime(timeStamp) as String
-                    listData.add(Links(url,key,dateTime))
+                    val timeStamp: String =
+                        dataSnapshot.child(key).child("time_stamp").value as String
+                    val timeStampL: Long = timeStamp.toLong()
+                    if (timeStampL >= dateRange) {
+                        val dateTime: String = localDateTime(timeStamp) as String
+                        listData.add(Links(url, key, dateTime))
+                    }
 
 
+
+
+                }
+
+                if(listData.isEmpty()) {
+                    showEmptyListDialog()
                 }
 
 
@@ -132,13 +170,28 @@ class StashList : AppCompatActivity() {
 
     }
 
+    private fun showEmptyListDialog() {
+        val emptyListDialog = Dialog(this)
+        emptyListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        emptyListDialog.setCancelable(false)
+        emptyListDialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        emptyListDialog.setContentView(R.layout.empty_list_dialog_layout)
+        emptyListDialog.show()
+
+        val closeTextView = emptyListDialog.findViewById<TextView>(R.id.closeTextView)
+        closeTextView.setOnClickListener {
+            emptyListDialog.cancel()
+        }
+
+    }
+
     private fun localDateTime(timeStamp: String): Any {
         val calendar = Calendar.getInstance()
         val tz = calendar.timeZone
         val sdf = SimpleDateFormat("MM.dd.yyy hh:mm:ss a", Locale.getDefault())
         sdf.timeZone = tz
         val tsLong = timeStamp.toLong()
-        return  sdf.format(Date(tsLong * 1000))
+        return sdf.format(Date(tsLong * 1000))
 
     }
 
@@ -150,7 +203,7 @@ class StashList : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (item.itemId == R.id.about){
+        if (item.itemId == R.id.about) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Stash v$version")
             builder.setMessage("Build Date: $buildDate\nby Michael May\nBombadu")
@@ -163,7 +216,7 @@ class StashList : AppCompatActivity() {
 
         if (item.itemId == R.id.add_link) {
 
-            if(show){
+            if (show) {
                 hideLinkEntryLayout()
             } else {
                 showLinkEntryLayout()
@@ -172,7 +225,7 @@ class StashList : AppCompatActivity() {
         }
 
 
-        if(item.itemId == R.id.sign_out) {
+        if (item.itemId == R.id.sign_out) {
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this, Auth::class.java))
             finish()
@@ -191,30 +244,46 @@ class StashList : AppCompatActivity() {
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         dialog.setContentView(R.layout.date_range_layout)
-        val timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()).toString()
-        val timeStampL = timeStamp.toLong()
-        var elapsedTime: Long
-        dialog.radio_group.setOnCheckedChangeListener{ group, checkedId ->
+        dialog.radio_group.setOnCheckedChangeListener { group, checkedId ->
             val selectedRadioButton: RadioButton = dialog.findViewById(checkedId)
-            val selected: String = selectedRadioButton.text as String
-            println("RB: $selected")
+            val selected: String = selectedRadioButton.text.toString()
+            //println("RB: $selected")
 
-            if(selected == "Today") {
-                elapsedTime = (TimeUnit.DAYS.toDays(1) / 1000)
-            } else if (selected == "Past Week") {
-                elapsedTime = (TimeUnit.DAYS.toDays(7) / 1000)
-            } else if (selected == "Past Month"){
-                elapsedTime = (TimeUnit.DAYS.toDays(30) / 1000)
-            } else {
-                elapsedTime = (TimeUnit.DAYS.toDays(1095) / 1000)
+            println("SELECTED: $selected")
+
+            val timeSpan: Long
+            //var myChecked = "all"
+            when (selected) {
+                "Past 24 Hours" -> {
+                    timeSpan = getRangeInTime(1)
+                    getFBData(timeSpan)
+
+
+                }
+                "Past Week" -> {
+                    timeSpan = getRangeInTime(7)
+                    getFBData(timeSpan)
+
+                }
+                "Past Month" -> {
+                    timeSpan = getRangeInTime(30)
+                    getFBData(timeSpan)
+
+                }
+                else -> {
+                    timeSpan = getRangeInTime(3650) // 10 years - all
+                    getFBData(timeSpan)
+
+                }
             }
 
-            val startTime = timeStampL - elapsedTime
-            //getFBData(startTime)
+
+            dialog.cancel()
         }
 
         dialog.show()
     }
+
 
     private fun showLinkEntryLayout() {
         show = true

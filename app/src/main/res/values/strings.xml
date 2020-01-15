@@ -18,4 +18,15 @@
     <string name="past_week">Past Week</string>
     <string name="past_month">Past Month</string>
     <string name="all">All</string>
+    <string name="your_list_is_empty">Your Stash is Empty</string>
+    <string name="empty_stash_list_note">Add links or posts to Stash. Simply use the Share Icon from your favorite apps and share to Stash. \n\nYou can also can manually add links by tapping the link icon at the top of the screen and type or paste the url.</string>
+    <string name="past_24_hours">Past 24 Hours</string>
+    <string name="link_image">Link Image</string>
+    <string name="shareicon">ShareIcon</string>
+    <string name="close">close</string>
+    <string name="password_reset">Password Reset</string>
+    <string name="enter_your_email_below_and_tap_the_reset_password_button_below">enter your email below and tap the \'reset password\' button below</string>
+    <string name="email_abcdefg_com">email@abcdefg.com</string>
+    <string name="reset_password">Reset Password</string>
+
 </resources>

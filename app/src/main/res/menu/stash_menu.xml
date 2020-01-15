@@ -14,7 +14,7 @@
         android:id="@+id/add_link"
         android:title="@string/add_link"
         android:orderInCategory="10"
-        android:icon="@drawable/ic_insert_link_black_24dp"
+        android:icon="@drawable/ic_insert_link_white_24dp"
         app:showAsAction="ifRoom">
 
     </item>
