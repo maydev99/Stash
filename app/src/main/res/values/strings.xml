@@ -28,5 +28,11 @@
     <string name="enter_your_email_below_and_tap_the_reset_password_button_below">enter your email below and tap the \'reset password\' button below</string>
     <string name="email_abcdefg_com">email@abcdefg.com</string>
     <string name="reset_password">Reset Password</string>
+    <string name="logo_image">Logo Image</string>
+    <string name="or">OR</string>
+    <string name="just_sign_in_with_your_google_account">Just Sign In with Your Google Account</string>
+    <string name="tap_here_to_create_an_account">Tap Here to Create an Account</string>
+    <string name="tap_here_to_sign_in">Tap Here to Sign In</string>
+
 
 </resources>
