@@ -1,9 +1,7 @@
 package com.bombadu.stash
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -24,8 +22,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_stash_list_entry_bar.*
 import kotlinx.android.synthetic.main.date_range_layout.*
-import kotlinx.android.synthetic.main.empty_list_dialog_layout.*
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -227,12 +223,16 @@ class StashList : AppCompatActivity() {
 
         if (item.itemId == R.id.sign_out) {
             FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, Auth::class.java))
+            startActivity(Intent(this, Auth2::class.java))
             finish()
         }
 
         if (item.itemId == R.id.date_range) {
             showDateRangeDialog()
+        }
+
+        if (item.itemId == R.id.help) {
+            startActivity(Intent(this, Help::class.java))
         }
 
         return super.onOptionsItemSelected(item)
@@ -257,22 +257,26 @@ class StashList : AppCompatActivity() {
                 "Past 24 Hours" -> {
                     timeSpan = getRangeInTime(1)
                     getFBData(timeSpan)
+                    showingTextView.text = "Showing Past 24 Hours"
 
 
                 }
                 "Past Week" -> {
                     timeSpan = getRangeInTime(7)
                     getFBData(timeSpan)
+                    showingTextView.text = "Showing Past Week"
 
                 }
                 "Past Month" -> {
                     timeSpan = getRangeInTime(30)
                     getFBData(timeSpan)
+                    showingTextView.text = "Showing Past Month"
 
                 }
                 else -> {
                     timeSpan = getRangeInTime(3650) // 10 years - all
                     getFBData(timeSpan)
+                    showingTextView.text = "Showing All"
 
                 }
             }

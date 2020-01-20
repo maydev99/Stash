@@ -47,15 +47,34 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/showingTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Showing All Stash's"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/add_link_layout"
+        app:layout_constraintStart_toStartOf="@id/recycler_view"
+        app:layout_constraintEnd_toEndOf="@id/recycler_view"
+        app:layout_constraintBottom_toTopOf="@id/recycler_view">
+
+    </TextView>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_link_layout"
-        tools:layout_editor_absoluteY="202dp" />
+        app:layout_constraintTop_toBottomOf="@+id/showingTextView"
+        android:paddingBottom="16dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

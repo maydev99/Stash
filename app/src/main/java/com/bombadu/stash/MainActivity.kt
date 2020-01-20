@@ -3,10 +3,7 @@ package com.bombadu.stash
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.os.Message
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.FirebaseDatabase
 
 
 open class MainActivity : AppCompatActivity() {

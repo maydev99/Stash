@@ -37,6 +37,7 @@ class AuthCheck : AppCompatActivity() {
 
         }
 
+
         //Check to see if User is logged in
         val currentUser = auth.currentUser
         if (currentUser != null) {
@@ -52,7 +53,7 @@ class AuthCheck : AppCompatActivity() {
             println("Authenticated")
 
         } else {
-            startActivity(Intent(this, Auth::class.java))
+            startActivity(Intent(this, Auth2::class.java))
             finish()
             println("Authentication Failed")
         }

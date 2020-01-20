@@ -67,15 +67,11 @@ class Auth : AppCompatActivity() {
         //Switches email Sign In to email Create Account
         createAccountTextView.setOnClickListener {
             if (!isCreatingNewAccount) {
-                //titleTextView.text = getString(R.string.new_account)
-                signInButton.text = getString(R.string.create_account)
-                createAccountTextView.text = getString(R.string.tap_here_to_sign_in)
-                isCreatingNewAccount = true
+                setScreenCreatingNewAccount()
+
             } else {
-                //titleTextView.text = getString(R.string.stash)
-                signInButton.text = getString(R.string.sign_in)
-                createAccountTextView.text = getString(R.string.tap_here_to_create_an_account)
-                isCreatingNewAccount = false
+                setScreenForSignIn()
+
             }
 
 
@@ -110,10 +106,9 @@ class Auth : AppCompatActivity() {
 
     //Handles the process of email sign in
     private fun signIn(email: String, password: String) {
-        auth!!.signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    sendEmailVerification()
                     startActivity(Intent(this, StashList::class.java))
                     makeAToast("Sign-In Successful")
                     finish()
@@ -124,7 +119,7 @@ class Auth : AppCompatActivity() {
 
     }
 
-    private fun sendEmailVerification() {
+    /*private fun sendEmailVerification() {
         val user = auth.currentUser
         user?.sendEmailVerification()
             ?.addOnCompleteListener(this) { task ->
@@ -144,17 +139,17 @@ class Auth : AppCompatActivity() {
                 }
                 // [END_EXCLUDE]
             }
-    }
+    }*/
 
     //Handles the process of email create account
     private fun createNewAccount(email: String, password: String) {
-        auth!!.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    //startActivity(Intent(this, StashList::class.java))
-                    sendEmailVerification()
-                    makeAToast("Account Created")
-                    finish()
+                    makeAToast("Account Created, Please Sign In")
+                    passwordEditText.text = null
+                    setScreenForSignIn()
+                    //finish()
                 } else {
                     makeAToast("Account Creation Failed")
                 }
@@ -163,10 +158,10 @@ class Auth : AppCompatActivity() {
     }
 
     private fun makeAToast(tMessage: String) {
-        Toast.makeText(this, tMessage, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, tMessage, Toast.LENGTH_LONG).show()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.sign_in_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -177,7 +172,7 @@ class Auth : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
+    }*/
 
     companion object{
         private const val TAG = "GoogleActivity"
@@ -197,7 +192,7 @@ class Auth : AppCompatActivity() {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
-                // ...
+
             }
         }
     }
@@ -224,5 +219,18 @@ class Auth : AppCompatActivity() {
                 }
 
             }
+    }
+
+    private fun setScreenCreatingNewAccount() {
+        signInButton.text = getString(R.string.create_account)
+        createAccountTextView.text = getString(R.string.tap_here_to_sign_in)
+        isCreatingNewAccount = true
+
+    }
+
+    private fun setScreenForSignIn(){
+        signInButton.text = getString(R.string.sign_in)
+        createAccountTextView.text = getString(R.string.tap_here_to_create_an_account)
+        isCreatingNewAccount = false
     }
 }

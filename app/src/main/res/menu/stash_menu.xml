@@ -37,6 +37,14 @@
 
     </item>
 
+    <item
+        android:id="@+id/help"
+        android:title="Help"
+        android:orderInCategory="35"
+        app:showAsAction="never">
+
+    </item>
+
 
 
 </menu>
