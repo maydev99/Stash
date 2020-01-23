@@ -31,7 +31,9 @@
             android:gravity="center"
             android:hint="@string/type_or_paste_link_here"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp" />
+            android:paddingRight="8dp"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/add_link_button"
@@ -51,7 +53,7 @@
         android:id="@+id/showingTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Showing All Stash's"
+        android:text="@string/showing_all_stash_s"
         android:textColor="@android:color/white"
         android:background="@color/colorPrimaryDark"
         android:gravity="center_horizontal"

@@ -1,6 +1,7 @@
 package com.bombadu.stash
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.ColorDrawable
@@ -36,14 +37,17 @@ class StashList : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var urlListRef: DatabaseReference? = null
     private var show = false
+    private var nagCountMax = 3
+    private var nagCount = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stash_list)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
         auth = FirebaseAuth.getInstance()
+        loadPrefs()
+
         val uid = auth.currentUser?.uid
         val usersRef = rootRef.child("users")
         val userDataRef = usersRef.child(uid.toString())
@@ -51,6 +55,7 @@ class StashList : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.add_edit_text)
         val addLinkButton = findViewById<Button>(R.id.add_link_button)
         val timeSpan: Long = getRangeInTime(3650)
+
 
         getFBData(timeSpan)
 
@@ -89,6 +94,19 @@ class StashList : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun savePrefs() {
+        val myPrefs = getSharedPreferences("prefs_key", Context.MODE_PRIVATE)
+        val myEditor = myPrefs.edit()
+        myEditor.putInt("prefs_key", nagCount)
+        myEditor.apply()
+
+    }
+
+    private fun loadPrefs() {
+        val myPrefs = getSharedPreferences("prefs_key", Context.MODE_PRIVATE)
+        nagCount = myPrefs.getInt("prefs_key", 0)
     }
 
     private fun getRangeInTime(dateRange: Long): Long {
@@ -143,8 +161,10 @@ class StashList : AppCompatActivity() {
 
                 }
 
-                if(listData.isEmpty()) {
+                if(listData.isEmpty() && nagCount < nagCountMax) {
                     showEmptyListDialog()
+                    nagCount++
+                    savePrefs()
                 }
 
 
@@ -257,26 +277,26 @@ class StashList : AppCompatActivity() {
                 "Past 24 Hours" -> {
                     timeSpan = getRangeInTime(1)
                     getFBData(timeSpan)
-                    showingTextView.text = "Showing Past 24 Hours"
+                    showingTextView.text = getString(R.string.showing_past_24_hours)
 
 
                 }
                 "Past Week" -> {
                     timeSpan = getRangeInTime(7)
                     getFBData(timeSpan)
-                    showingTextView.text = "Showing Past Week"
+                    showingTextView.text = getString(R.string.showing_past_week)
 
                 }
                 "Past Month" -> {
                     timeSpan = getRangeInTime(30)
                     getFBData(timeSpan)
-                    showingTextView.text = "Showing Past Month"
+                    showingTextView.text = getString(R.string.showing_past_month)
 
                 }
                 else -> {
                     timeSpan = getRangeInTime(3650) // 10 years - all
                     getFBData(timeSpan)
-                    showingTextView.text = "Showing All"
+                    showingTextView.text = getString(R.string.showing_all)
 
                 }
             }

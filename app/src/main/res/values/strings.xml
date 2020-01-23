@@ -33,6 +33,13 @@
     <string name="just_sign_in_with_your_google_account">To get started, sign In with Your Google account by tapping the button below</string>
     <string name="tap_here_to_create_an_account">Tap Here to Create an Account</string>
     <string name="tap_here_to_sign_in">Tap Here to Sign In</string>
+    <string name="showing_past_24_hours">Showing Past 24 Hours</string>
+    <string name="showing_past_week">Showing Past Week</string>
+    <string name="showing_past_month">Showing Past Month</string>
+    <string name="showing_all">Showing All</string>
+    <string name="showing_all_stash_s">Showing All Stash\'s</string>
+    <string name="help">Help</string>
+    <string name="date_range">Date Range</string>
 
 
 </resources>
