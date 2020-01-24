@@ -35,10 +35,13 @@
                 <TextView
                     android:id="@+id/dateTimeTextView"
                     android:layout_width="1dp"
-                    android:layout_weight="3"
+                    android:layout_weight="5"
                     android:layout_height="wrap_content"
+                    android:text="01.01.2020 8:45 Pm"
                     android:textColor="@android:color/black"
-                    android:gravity="center_horizontal"/>
+                    android:gravity="center_horizontal"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginEnd="8dp"/>
 
                 <ImageView
                     android:id="@+id/share_image_view"
@@ -60,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"/>
+
 
         </LinearLayout>
 

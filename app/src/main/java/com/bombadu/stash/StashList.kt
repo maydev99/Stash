@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_stash_list_entry_bar.*
 import kotlinx.android.synthetic.main.date_range_layout.*
+import org.nibor.autolink.LinkExtractor
+import org.nibor.autolink.LinkType
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -32,8 +34,8 @@ class StashList : AppCompatActivity() {
 
     private var rootRef = FirebaseDatabase.getInstance().reference
     private var listData = mutableListOf<Links>()
-    private val version = "1.0"
-    private val buildDate = "1-6-2020"
+    private val version = "0.8"
+    private val buildDate = "1-23-2020"
     private lateinit var auth: FirebaseAuth
     private var urlListRef: DatabaseReference? = null
     private var show = false
@@ -60,10 +62,14 @@ class StashList : AppCompatActivity() {
         getFBData(timeSpan)
 
         val intent = intent
-        val myUrl = intent.getStringExtra("url_key")
+        var myUrl = intent.getStringExtra("url_key")
+        //****CODE HERE*************************************************
+
+
 
 
         if (myUrl != null) {
+            myUrl = extractUrl(myUrl)
             val timeStamp = getTimeStamp()
             val taskMap: MutableMap<String, Any> = HashMap()
             taskMap["time_stamp"] = timeStamp
@@ -95,6 +101,22 @@ class StashList : AppCompatActivity() {
 
 
     }
+
+    private fun extractUrl(myUrl: String?): String? {
+       var linkExtractor = LinkExtractor.builder()
+        .linkTypes(EnumSet.of(LinkType.URL, LinkType.WWW, LinkType.EMAIL))
+        .build()
+
+        var links = linkExtractor.extractLinks(myUrl);
+        var link = links.iterator().next()
+        link.type
+        link.beginIndex
+        link.endIndex
+        return myUrl?.substring(link.beginIndex, link.endIndex)
+
+
+    }
+
 
     private fun savePrefs() {
         val myPrefs = getSharedPreferences("prefs_key", Context.MODE_PRIVATE)
