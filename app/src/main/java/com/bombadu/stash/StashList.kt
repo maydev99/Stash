@@ -62,10 +62,7 @@ class StashList : AppCompatActivity() {
         getFBData(timeSpan)
 
         val intent = intent
-        var myUrl = intent.getStringExtra("url_key")
-        //****CODE HERE*************************************************
-
-
+        var myUrl= intent.getStringExtra("url_key")
 
 
         if (myUrl != null) {
@@ -73,7 +70,7 @@ class StashList : AppCompatActivity() {
             val timeStamp = getTimeStamp()
             val taskMap: MutableMap<String, Any> = HashMap()
             taskMap["time_stamp"] = timeStamp
-            taskMap["url"] = myUrl
+            taskMap["url"] = myUrl as String
             urlListRef?.push()?.updateChildren(taskMap)
         }
 
@@ -103,12 +100,11 @@ class StashList : AppCompatActivity() {
     }
 
     private fun extractUrl(myUrl: String?): String? {
-       var linkExtractor = LinkExtractor.builder()
+       val linkExtractor = LinkExtractor.builder()
         .linkTypes(EnumSet.of(LinkType.URL, LinkType.WWW, LinkType.EMAIL))
         .build()
-
-        var links = linkExtractor.extractLinks(myUrl);
-        var link = links.iterator().next()
+        val links = linkExtractor.extractLinks(myUrl)
+        val link = links.iterator().next()
         link.type
         link.beginIndex
         link.endIndex
