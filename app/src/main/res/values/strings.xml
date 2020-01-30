@@ -19,7 +19,7 @@
     <string name="past_month">Past Month</string>
     <string name="all">All</string>
     <string name="your_list_is_empty">Your Stash is Empty</string>
-    <string name="empty_stash_list_note">Add links or posts to Stash. Simply use the Share Icon from your favorite apps and share to Stash. \n\nYou can also can manually add links by tapping the link icon at the top of the screen and type or paste the url.</string>
+    <string name="empty_stash_list_note">To add links or posts to Stash, simply use the Share Icon from your favorite apps and share to Stash. \n\nYou can also can manually add links by tapping the link icon at the top of the screen and type or paste the url.</string>
     <string name="past_24_hours">Past 24 Hours</string>
     <string name="link_image">Link Image</string>
     <string name="shareicon">ShareIcon</string>
@@ -40,6 +40,9 @@
     <string name="showing_all_stash_s">Showing All Stash\'s</string>
     <string name="help">Help</string>
     <string name="date_range">Date Range</string>
+    <string name="help_delete_stash_text">To Delete a link from your list, long press on the card you wish to delete. Then you will be prompted to confirm the deletion.</string>
+    <string name="help_share_stashed_link">To share your stashed link with other people, tap the share icon on the card</string>
+    <string name="help_non_working_links">Sometimes a link you are stashing just will not work with Stash. It happens. With millions of apps and websites, occasionally there will be one that does not stash well to your list.</string>
 
 
 </resources>

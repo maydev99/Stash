@@ -21,7 +21,9 @@ class AuthCheck : AppCompatActivity() {
         setContentView(R.layout.activity_auth_check)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         auth = FirebaseAuth.getInstance()
-        checkConnection()
+        //checkConnection()
+        fetchSharedLink()
+        checkIfUserIsAuthenticated()
     }
 
     private fun checkConnection() {
@@ -38,7 +40,7 @@ class AuthCheck : AppCompatActivity() {
             }
 
             builder.setNegativeButton("close") { _, _ ->
-                finish()
+                //Closes Dialog
             }
             builder.show()
         } else {
