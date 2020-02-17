@@ -1,90 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
     android:padding="16dp"
+    android:background="#000000"
     tools:context=".Help">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:cardCornerRadius="16dp">
 
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:src="@mipmap/ic_launcher_round" />
-
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/empty_stash_list_note"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:orientation="vertical"
+                >
 
-            <View
-                android:layout_width="250dp"
-                android:layout_height="3dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@color/colorPrimary" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center_horizontal"
+                    android:text="@string/add_links"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    />
 
-            <TextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/empty_stash_list_note"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"/>
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
 
-                android:text="@string/help_delete_stash_text"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center_horizontal"
+                    android:text="@string/delete_links"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp" />
 
-            <View
-                android:layout_width="250dp"
-                android:layout_height="3dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@color/colorPrimary" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_delete_stash_text"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
-            <TextView
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+               >
 
-                android:text="@string/help_share_stashed_link"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center_horizontal"
+                    android:text="@string/share_links"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp" />
 
-            <View
-                android:layout_width="250dp"
-                android:layout_height="3dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@color/colorPrimary" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_share_stashed_link"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            </LinearLayout>
 
-                android:text="@string/help_non_working_links"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+        </androidx.cardview.widget.CardView>
 
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>

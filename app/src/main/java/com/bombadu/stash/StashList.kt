@@ -34,8 +34,6 @@ class StashList : AppCompatActivity() {
 
     private var rootRef = FirebaseDatabase.getInstance().reference
     private var listData = mutableListOf<Links>()
-    private val version = "0.8"
-    private val buildDate = "1-23-2020"
     private lateinit var auth: FirebaseAuth
     private var urlListRef: DatabaseReference? = null
     private var show = false
@@ -62,7 +60,7 @@ class StashList : AppCompatActivity() {
         getFBData(timeSpan)
 
         val intent = intent
-        var myUrl= intent.getStringExtra("url_key")
+        var myUrl = intent.getStringExtra("url_key")
 
 
         if (myUrl != null) {
@@ -100,9 +98,9 @@ class StashList : AppCompatActivity() {
     }
 
     private fun extractUrl(myUrl: String?): String? {
-       val linkExtractor = LinkExtractor.builder()
-        .linkTypes(EnumSet.of(LinkType.URL, LinkType.WWW, LinkType.EMAIL))
-        .build()
+        val linkExtractor = LinkExtractor.builder()
+            .linkTypes(EnumSet.of(LinkType.URL, LinkType.WWW, LinkType.EMAIL))
+            .build()
         val links = linkExtractor.extractLinks(myUrl)
         val link = links.iterator().next()
         link.type
@@ -175,11 +173,9 @@ class StashList : AppCompatActivity() {
                     }
 
 
-
-
                 }
 
-                if(listData.isEmpty() && nagCount < nagCountMax) {
+                if (listData.isEmpty() && nagCount < nagCountMax) {
                     showEmptyListDialog()
                     nagCount++
                     savePrefs()
@@ -239,8 +235,8 @@ class StashList : AppCompatActivity() {
 
         if (item.itemId == R.id.about) {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Stash v$version")
-            builder.setMessage("Build Date: $buildDate\nby Michael May\nBombadu")
+            builder.setTitle(getString(R.string.stash_version))
+            builder.setMessage("Build Date: 2-17-2020\nby Michael May\nBombadu")
             builder.setIcon(R.mipmap.ic_launcher_round)
             builder.show()
 

@@ -14,7 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Help"></activity>
+        <activity android:name=".Help"
+            android:label="Help">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+
+        </activity>
         <activity android:name=".PasswordReset" />
         <activity android:name=".AuthCheck">
             <intent-filter>
