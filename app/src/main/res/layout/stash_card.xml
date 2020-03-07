@@ -6,7 +6,8 @@
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     android:paddingRight="16dp"
-    android:paddingLeft="16dp">
+    android:paddingLeft="16dp"
+    android:id="@+id/card_container">
 
 
     <View

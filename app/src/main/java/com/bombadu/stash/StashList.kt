@@ -5,24 +5,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
-import android.transition.ChangeBounds
-import android.transition.TransitionManager
+import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.Window
-import android.view.animation.AnticipateOvershootInterpolator
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bombadu.stash.model.Links
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_stash_list_entry_bar.*
+import kotlinx.android.synthetic.main.activity_stash_list.*
 import kotlinx.android.synthetic.main.date_range_layout.*
+import kotlinx.android.synthetic.main.web_view_fragment.*
 import org.nibor.autolink.LinkExtractor
 import org.nibor.autolink.LinkType
 import java.text.SimpleDateFormat
@@ -30,7 +31,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class StashList : AppCompatActivity() {
+class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
 
     private var rootRef = FirebaseDatabase.getInstance().reference
     private var listData = mutableListOf<Links>()
@@ -39,12 +40,22 @@ class StashList : AppCompatActivity() {
     private var show = false
     private var nagCountMax = 3
     private var nagCount = 0
+    private var isTwoPane: Boolean = false
+    private var lastWebUrl: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_stash_list)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setContentView(R.layout.activity_stash_list2)
+        isTwoPane = findViewById<LinearLayout>(R.id.activity_web_view_frag) != null
+
+        requestedOrientation = if (isTwoPane) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
+        //requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         auth = FirebaseAuth.getInstance()
         loadPrefs()
 
@@ -92,6 +103,13 @@ class StashList : AppCompatActivity() {
             }
 
 
+        }
+
+        if (isTwoPane){
+            openInBrowserButton.setOnClickListener {
+                myUrl = web_view_fr.url
+                openBrowser(myUrl)
+            }
         }
 
 
@@ -172,6 +190,18 @@ class StashList : AppCompatActivity() {
                         listData.add(Links(url, key, dateTime))
                     }
 
+                    lastWebUrl = url
+
+
+                }
+
+                if (isTwoPane) {
+                    if (lastWebUrl != "") {
+                        web_view_fr.settings.javaScriptEnabled = true
+                        web_view_fr.loadUrl(lastWebUrl)
+
+                    }
+
 
                 }
 
@@ -181,14 +211,12 @@ class StashList : AppCompatActivity() {
                     savePrefs()
                 }
 
-
                 val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
                 recyclerView.layoutManager = LinearLayoutManager(this@StashList)
                 val stashAdapter = StashAdapter(listData)
                 recyclerView.adapter = stashAdapter
-
+                stashAdapter.setItemClickCallback(this@StashList)
                 stashAdapter.notifyDataSetChanged()
-
 
             }
 
@@ -196,7 +224,6 @@ class StashList : AppCompatActivity() {
         }
 
         urlListRef?.addValueEventListener(urlListener)
-
 
     }
 
@@ -249,6 +276,7 @@ class StashList : AppCompatActivity() {
             if (show) {
                 hideLinkEntryLayout()
             } else {
+
                 showLinkEntryLayout()
             }
 
@@ -315,7 +343,6 @@ class StashList : AppCompatActivity() {
                 }
             }
 
-
             dialog.cancel()
         }
 
@@ -324,33 +351,44 @@ class StashList : AppCompatActivity() {
 
 
     private fun showLinkEntryLayout() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein)
+        add_link_layout.startAnimation(fadeIn)
         show = true
+        add_link_layout.visibility = View.VISIBLE
+    }
+    private fun hideLinkEntryLayout() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein)
+        val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout)
+        add_link_layout.startAnimation(fadeOut)
+        showingTextView.startAnimation(fadeIn)
+        show = false
+        add_link_layout.visibility = View.GONE
 
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(this, R.layout.activity_stash_list_entry_bar)
-
-        val transition = ChangeBounds()
-        transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-        transition.duration = 1200
-
-        TransitionManager.beginDelayedTransition(constraint, transition)
-        constraintSet.applyTo(constraint)
     }
 
-    private fun hideLinkEntryLayout() {
 
-        show = false
+    override fun onItemClick(p: Int) {
+        val revPos = listData.size - (p + 1)
+        val item = listData[revPos]
+        val myUrl = item.webUrl
+        val vib = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vib.vibrate(50)
 
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(this, R.layout.activity_stash_list)
+        if(isTwoPane) {
+            web_view_fr.settings.javaScriptEnabled = true
+            web_view_fr.loadUrl(myUrl)
 
-        val transition = ChangeBounds()
-        transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-        transition.duration = 1200
 
-        TransitionManager.beginDelayedTransition(constraint, transition)
-        constraintSet.applyTo(constraint)
 
+        } else {
+            openBrowser(myUrl)
+        }
+    }
+
+    private fun openBrowser(myUrl: String){
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(myUrl)
+        startActivity(intent)
     }
 
 

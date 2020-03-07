@@ -48,6 +48,7 @@
     <string name="add_links">Add Links</string>
     <string name="stash_version">Stash v0.9.1</string>
     <string name="build_date">Build Date: 2–17–2020\nby Michael May\nBombadu</string>
+    <string name="open_in_browser">Open In Browser</string>
 
 
 </resources>

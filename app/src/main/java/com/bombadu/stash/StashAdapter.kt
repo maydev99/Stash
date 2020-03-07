@@ -21,6 +21,15 @@ class StashAdapter(private val listData: List<Links>) :
     private var rootRef = FirebaseDatabase.getInstance().reference
     private var uid = auth.currentUser?.uid
     private var urlListRef = rootRef.child("users").child(uid.toString()).child("url_list")
+    private var itemClickCallback: ItemClickCallback? = null
+
+    internal interface ItemClickCallback {
+        fun onItemClick(p: Int)
+    }
+
+    internal fun setItemClickCallback(inItemClickCallback: ItemClickCallback) {
+        this.itemClickCallback = inItemClickCallback
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,7 +50,7 @@ class StashAdapter(private val listData: List<Links>) :
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        Preview.PreviewListener {
+        Preview.PreviewListener, View.OnClickListener {
         var webUrl: String? = null
         var urlKey: String? = null
         var timeStamp: String? = null
@@ -52,6 +61,8 @@ class StashAdapter(private val listData: List<Links>) :
             timeStamp = links.dateTime
             val previewView = itemView.findViewById<Preview>(R.id.preview_view)
             val dateTimeTextView = itemView.findViewById<TextView>(R.id.dateTimeTextView)
+
+
             dateTimeTextView.text = timeStamp
             previewView.setListener(this)
             previewView.setData(webUrl)
@@ -76,11 +87,7 @@ class StashAdapter(private val listData: List<Links>) :
                 itemView.context.startActivity(shareIntent)
             }
 
-            itemView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(webUrl)
-                itemView.context.startActivity(intent)
-            }
+            itemView.card_container.setOnClickListener(this)
 
             itemView.setOnLongClickListener {
                 val builder = AlertDialog.Builder(itemView.context)
@@ -101,6 +108,10 @@ class StashAdapter(private val listData: List<Links>) :
             }
 
 
+        }
+
+        override fun onClick(p0: View?) {
+            itemClickCallback!!.onItemClick(adapterPosition)
         }
 
 
