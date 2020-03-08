@@ -23,7 +23,6 @@
     <string name="past_24_hours">Past 24 Hours</string>
     <string name="link_image">Link Image</string>
     <string name="shareicon">ShareIcon</string>
-    <string name="close">close</string>
     <string name="password_reset">Password Reset</string>
     <string name="enter_your_email_below_and_tap_the_reset_password_button_below">enter your email below and tap the \'reset password\' button below</string>
     <string name="email_abcdefg_com">email@abcdefg.com</string>
@@ -49,6 +48,8 @@
     <string name="stash_version">Stash v0.9.1</string>
     <string name="build_date">Build Date: 2–17–2020\nby Michael May\nBombadu</string>
     <string name="open_in_browser">Open In Browser</string>
+    <string name="_01_01_2020_8_45_pm">01.01.2020 8:45 Pm</string>
+    <string name="close">close</string>
 
 
 </resources>

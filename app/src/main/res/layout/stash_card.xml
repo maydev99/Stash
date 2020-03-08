@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:addStatesFromChildren="false"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    android:paddingRight="16dp"
     android:paddingLeft="16dp"
-    android:id="@+id/card_container">
+    android:paddingRight="16dp">
 
 
     <View
@@ -18,8 +19,9 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,45 +31,41 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
 
                 <TextView
                     android:id="@+id/dateTimeTextView"
                     android:layout_width="1dp"
-                    android:layout_weight="5"
                     android:layout_height="wrap_content"
-                    android:text="01.01.2020 8:45 Pm"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_horizontal"
                     android:layout_marginStart="64dp"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="5"
+                    android:gravity="center_horizontal"
+                    android:text="@string/_01_01_2020_8_45_pm"
+                    android:textColor="@android:color/black" />
 
                 <ImageView
                     android:id="@+id/share_image_view"
                     android:layout_width="1dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_share_black_24dp"
-                    android:contentDescription="@string/sharebutton" />
-
-
+                    android:layout_weight="1"
+                    android:contentDescription="@string/sharebutton"
+                    android:src="@drawable/ic_share_black_24dp" />
 
 
             </LinearLayout>
-
 
 
             <com.freesoulapps.preview.android.Preview
                 android:id="@+id/preview_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"/>
+                android:padding="8dp" />
 
 
         </LinearLayout>
-
 
 
     </androidx.cardview.widget.CardView>

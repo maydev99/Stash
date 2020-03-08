@@ -1,18 +1,23 @@
 package com.bombadu.stash
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.view.animation.AnimationUtils
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +47,7 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
     private var nagCount = 0
     private var isTwoPane: Boolean = false
     private var lastWebUrl: String = ""
+    //private lateinit var progressBar: ProgressBar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -197,8 +203,17 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
 
                 if (isTwoPane) {
                     if (lastWebUrl != "") {
-                        web_view_fr.settings.javaScriptEnabled = true
+                        webViewProgressBar.visibility = View.VISIBLE
+                        web_view_fr.visibility = View.INVISIBLE
+                        //web_view_fr.settings.javaScriptEnabled = true
                         web_view_fr.loadUrl(lastWebUrl)
+                        web_view_fr.webViewClient = object : WebViewClient() {
+                            override fun onPageFinished(view: WebView?, url: String?) {
+                                super.onPageFinished(view, url)
+                                webViewProgressBar.visibility = View.GONE
+                                web_view_fr.visibility = View.VISIBLE
+                            }
+                        }
 
                     }
 
@@ -306,7 +321,7 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         dialog.setContentView(R.layout.date_range_layout)
-        dialog.radio_group.setOnCheckedChangeListener { group, checkedId ->
+        dialog.radio_group.setOnCheckedChangeListener { _, checkedId ->
             val selectedRadioButton: RadioButton = dialog.findViewById(checkedId)
             val selected: String = selectedRadioButton.text.toString()
             //println("RB: $selected")
@@ -367,28 +382,46 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
     }
 
 
+
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onItemClick(p: Int) {
         val revPos = listData.size - (p + 1)
         val item = listData[revPos]
         val myUrl = item.webUrl
-        val vib = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vib.vibrate(50)
+        vibratePhone()
+
 
         if(isTwoPane) {
+            webViewProgressBar.visibility = View.VISIBLE
+            web_view_fr.visibility = View.INVISIBLE
             web_view_fr.settings.javaScriptEnabled = true
             web_view_fr.loadUrl(myUrl)
-
-
+            web_view_fr.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    webViewProgressBar.visibility = View.GONE
+                    web_view_fr.visibility = View.VISIBLE
+                }
+            }
 
         } else {
             openBrowser(myUrl)
         }
     }
 
-    private fun openBrowser(myUrl: String){
+    private fun openBrowser(myUrl: String?){
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(myUrl)
         startActivity(intent)
+    }
+
+    private fun vibratePhone() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(50)
+        }
     }
 
 

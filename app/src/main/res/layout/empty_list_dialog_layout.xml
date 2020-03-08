@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="close"
+                android:text="@string/close"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
         </LinearLayout>

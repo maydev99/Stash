@@ -2,7 +2,6 @@ package com.bombadu.stash
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.provider.Settings

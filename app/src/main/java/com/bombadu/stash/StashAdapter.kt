@@ -2,7 +2,6 @@ package com.bombadu.stash
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,12 +93,12 @@ class StashAdapter(private val listData: List<Links>) :
                 builder.setTitle("Delete this item")
                 builder.setMessage("Are you sure?")
                 builder.setIcon(R.mipmap.ic_launcher_round)
-                builder.setPositiveButton("delete") { dialog, which ->
+                builder.setPositiveButton("delete") { _, _ ->
                     Toast.makeText(itemView.context, "Deleted", Toast.LENGTH_SHORT).show()
                     urlListRef.child(urlKey.toString()).removeValue()
                 }
 
-                builder.setNegativeButton("cancel") { dialog, which ->
+                builder.setNegativeButton("cancel") { _, _ ->
                     //Toast.makeText(itemView.context, "Deleted",Toast.LENGTH_SHORT).show()
                 }
                 builder.show()
@@ -111,6 +110,7 @@ class StashAdapter(private val listData: List<Links>) :
         }
 
         override fun onClick(p0: View?) {
+
             itemClickCallback!!.onItemClick(adapterPosition)
         }
 
