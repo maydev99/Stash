@@ -47,7 +47,7 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
     private var nagCount = 0
     private var isTwoPane: Boolean = false
     private var lastWebUrl: String = ""
-    //private lateinit var progressBar: ProgressBar
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -205,7 +205,7 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
                     if (lastWebUrl != "") {
                         webViewProgressBar.visibility = View.VISIBLE
                         web_view_fr.visibility = View.INVISIBLE
-                        //web_view_fr.settings.javaScriptEnabled = true
+                        web_view_fr.settings.javaScriptEnabled = true
                         web_view_fr.loadUrl(lastWebUrl)
                         web_view_fr.webViewClient = object : WebViewClient() {
                             override fun onPageFinished(view: WebView?, url: String?) {
@@ -414,7 +414,7 @@ class StashList : AppCompatActivity(), StashAdapter.ItemClickCallback {
         intent.data = Uri.parse(myUrl)
         startActivity(intent)
     }
-
+    @SuppressLint
     private fun vibratePhone() {
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= 26) {
